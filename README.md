@@ -39,6 +39,7 @@ sudo nano ~/.profile
 ```
 
 add
+
 ```
 # set PATH so it includes yarn bin if it exists
 if [ -d "$HOME/.yarn/bin" ] ; then
@@ -47,11 +48,17 @@ fi
 ```
 
 then
+
 ```
 bash -l
 ```
 
+## Extensions
+
+[prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
 ## CMD history:
+
 ```sh
 yarn global add @nestjs/cli
 nest new todo
