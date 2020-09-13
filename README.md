@@ -32,6 +32,16 @@ $ yarn test:cov
 
 ---
 
+## New module
+
+```
+nest generate module todo
+nest generate controller todo
+nest generate service todo
+```
+
+---
+
 ## Yarn setup:
 
 ```
