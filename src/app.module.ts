@@ -6,6 +6,5 @@ import { TodoModule } from './todo/todo.module';
 @Module({
   imports: [ConfigModule.forRoot(), TodoModule],
   controllers: [AppController],
-  providers: [],
 })
 export class AppModule {}
