@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  # service:
+  #   build: .
+  #   volumes:
+  #     - .:/srv/service
+  #   ports:
+  #     - ${APP_PORT}:${APP_PORT}
+  db:
+    image: mysql:5.7.30
+    command: mysqld --sql_mode="" --init-file /data/application/init.sql
+    restart: always
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+      - ./settings/mysql/init.sql:/data/application/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:3306

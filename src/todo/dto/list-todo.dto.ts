@@ -5,7 +5,7 @@ export class ListTodoDTO {
   @IsOptional()
   @Transform(page => parseInt(page))
   @IsInt()
-  @Min(0)
+  @Min(1)
   page: number;
 
   @IsOptional()
