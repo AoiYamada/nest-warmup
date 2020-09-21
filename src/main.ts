@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as helmet from 'helmet';
@@ -10,6 +11,8 @@ async function bootstrap() {
     // FYI: https://github.com/expressjs/cors#configuration-options
     cors: true,
   });
+  const configService = app.get(ConfigService);
+
   app.use(helmet());
   app.useGlobalPipes(
     new ValidationPipe({
@@ -21,6 +24,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.APP_PORT);
+  await app.listen(configService.get('app.port'));
 }
 bootstrap();

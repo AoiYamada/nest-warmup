@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions } from 'typeorm';
 import { CreateTodoDTO } from './dto/create-todo.dto';
-import { ListTodoDTO } from './dto/list-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { Todo } from './todo.entity';
 import { TodoRepository } from './todo.repository';
@@ -8,25 +9,36 @@ import { TodoRepository } from './todo.repository';
 @Injectable()
 // Note: seems useless here but it is useful when the business logic require to manipulate multiple tables
 export class TodoService {
-  constructor(private readonly todoRepository: TodoRepository) {}
+  constructor(
+    // TODO: nest doc examples inject entity directly, and others use repository layer, see if it is useful
+    @InjectRepository(TodoRepository)
+    private todoRepository: TodoRepository,
+  ) {}
 
-  async create(todo: CreateTodoDTO): Promise<{ _id: string }> {
-    return this.todoRepository.create(todo);
+  async create(payload: CreateTodoDTO): Promise<{ id: number }> {
+    const todo = this.todoRepository.create(payload);
+    return this.todoRepository.save(todo);
   }
 
-  async get(_id: string): Promise<Todo | undefined> {
-    return this.todoRepository.get(_id);
+  async get(id: number): Promise<Todo | undefined> {
+    return this.todoRepository.findOne(id);
   }
 
-  async list(filters: ListTodoDTO): Promise<Todo[]> {
-    return this.todoRepository.list(filters);
+  async list(filters: FindManyOptions): Promise<Todo[]> {
+    return this.todoRepository.find(filters);
   }
 
-  async update(_id: string, payload: UpdateTodoDTO): Promise<Todo | undefined> {
-    return this.todoRepository.update(_id, payload);
+  async update(id: number, payload: UpdateTodoDTO): Promise<Todo | undefined> {
+    await this.todoRepository.update(id, payload);
+    return this.todoRepository.findOne(id);
   }
 
-  async delete(_id: string): Promise<void> {
-    return this.todoRepository.delete(_id);
+  async delete(id: number): Promise<void> {
+    await this.todoRepository.softDelete(id);
   }
+
+  // TODO: endpoint for restore softDeleted item
+  // async restore(id: number): Promise<void> {
+  //   await this.todoRepository.restore(id);
+  // }
 }
