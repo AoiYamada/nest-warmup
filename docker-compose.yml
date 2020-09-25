@@ -8,7 +8,7 @@ services:
   #   ports:
   #     - ${APP_PORT}:${APP_PORT}
   db:
-    image: mysql:5.7.30
+    image: ${DB_IMAGE}
     command: mysqld --sql_mode="" --init-file /data/application/init.sql
     restart: always
     volumes:
@@ -16,6 +16,7 @@ services:
       - ./settings/mysql/init.sql:/data/application/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
