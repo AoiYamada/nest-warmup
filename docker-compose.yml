@@ -8,14 +8,15 @@ services:
   #   ports:
   #     - ${APP_PORT}:${APP_PORT}
   db:
-    image: mysql:5.7.30
-    command: mysqld --sql_mode="" --init-file /data/application/init.sql
+    image: ${DATABASE_TYPE}:${DATABASE_VERSION}
+    command: mysqld --sql_mode=""
     restart: always
     volumes:
+      - ./settings/mysql/config-file.cnf:/etc/mysql/conf.d/config-file.cnf
       - ./volumes/mysql:/var/lib/mysql
-      - ./settings/mysql/init.sql:/data/application/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
