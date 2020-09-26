@@ -9,6 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { Pagination } from 'src/utils/limit-offset-paginate';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { ListTodoDTO } from './dto/list-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
@@ -37,13 +38,15 @@ export class TodoController {
 
   @Get()
   async list(
-    @Query() { page = 1, limit: take = 10, ...filters }: ListTodoDTO,
-  ): Promise<Todo[]> {
-    return this.todoService.list({
-      where: [filters],
-      skip: (page - 1) * take,
-      take,
-    });
+    @Query() { page = 1, limit = 10, ...filters }: ListTodoDTO,
+  ): Promise<Pagination<Todo>> {
+    return this.todoService.list(
+      {
+        page,
+        limit,
+      },
+      filters,
+    );
   }
 
   @Patch(':id')

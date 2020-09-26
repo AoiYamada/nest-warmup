@@ -1,4 +1,4 @@
-import { MinLength, MaxLength, IsInt } from 'class-validator';
+import { MinLength, MaxLength } from 'class-validator';
 
 export class CreateTodoDTO {
   @MinLength(1)
