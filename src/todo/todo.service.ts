@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions } from 'typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'src/utils/limit-offset-paginate';
+import { Like } from 'typeorm';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { Todo } from './todo.entity';
@@ -24,8 +29,22 @@ export class TodoService {
     return this.todoRepository.findOne(id);
   }
 
-  async list(filters: FindManyOptions): Promise<Todo[]> {
-    return this.todoRepository.find(filters);
+  async list(
+    paginateOptions: IPaginationOptions,
+    { title = null, content = null }, // TODO: specify what is search options
+  ): Promise<Pagination<Todo>> {
+    return paginate<Todo>(
+      this.todoRepository,
+      { ...paginateOptions, route: '/todo' },
+      {
+        where: [
+          {
+            ...(title && { title: Like(`%${title}%`) }),
+            ...(content && { content: Like(`%${content}%`) }),
+          },
+        ],
+      },
+    );
   }
 
   async update(id: number, payload: UpdateTodoDTO): Promise<Todo | undefined> {
