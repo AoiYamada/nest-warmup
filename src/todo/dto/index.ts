@@ -1,3 +1,3 @@
-export { CreateTodoDTO } from './create-todo.dto';
-export { UpdateTodoDTO } from './update-todo.dto';
-export { ListTodoDTO } from './list-todo.dto';
+export { CreateTodoDto } from './create-todo.dto';
+export { UpdateTodoDto } from './update-todo.dto';
+export { ListTodoDto } from './list-todo.dto';

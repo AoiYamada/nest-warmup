@@ -1,6 +1,6 @@
 import { MinLength, MaxLength, IsEmail, IsOptional } from 'class-validator';
 
-export class UpdateUserDTO {
+export class UpdateUserDto {
   @IsOptional()
   @MinLength(1)
   @MaxLength(20)

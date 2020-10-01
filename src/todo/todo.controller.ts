@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Pagination } from 'src/utils/limit-offset-paginate';
 import { Like } from 'typeorm';
-import { CreateTodoDTO, UpdateTodoDTO, ListTodoDTO } from './dto';
+import { CreateTodoDto, UpdateTodoDto, ListTodoDto } from './dto';
 import { Todo } from './todo.entity';
 import { TodoService } from './todo.service';
 
@@ -20,7 +20,7 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Post()
-  async create(@Body() payload: CreateTodoDTO): Promise<{ id: number }> {
+  async create(@Body() payload: CreateTodoDto): Promise<{ id: number }> {
     return this.todoService.create(payload);
   }
 
@@ -37,7 +37,7 @@ export class TodoController {
 
   @Get()
   async list(
-    @Query() { page = 1, limit = 10, ...filters }: ListTodoDTO,
+    @Query() { page = 1, limit = 10, ...filters }: ListTodoDto,
   ): Promise<Pagination<Todo>> {
     return this.todoService.list(
       {
@@ -59,7 +59,7 @@ export class TodoController {
   @Patch(':id')
   async patch(
     @Param('id') id: number,
-    @Body() payload: UpdateTodoDTO,
+    @Body() payload: UpdateTodoDto,
   ): Promise<Todo> {
     const result = await this.todoService.update(id, payload);
 

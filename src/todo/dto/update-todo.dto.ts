@@ -1,6 +1,6 @@
 import { MinLength, MaxLength, IsOptional } from 'class-validator';
 
-export class UpdateTodoDTO {
+export class UpdateTodoDto {
   @IsOptional()
   @MinLength(1)
   @MaxLength(20)

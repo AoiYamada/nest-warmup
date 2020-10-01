@@ -1,7 +1,7 @@
 import { IsOptional } from 'class-validator';
-import { ListDTO } from 'src/common/list.dto';
+import { ListDto } from 'src/common/list.dto';
 
-export class ListTodoDTO extends ListDTO {
+export class ListTodoDto extends ListDto {
   @IsOptional()
   title?: string;
 
