@@ -1,20 +1,7 @@
-import { Min, Max, IsInt, IsOptional } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsOptional } from 'class-validator';
+import { ListDTO } from 'src/common/list.dto';
 
-export class ListTodoDTO {
-  @IsOptional()
-  @Transform((page) => parseInt(page))
-  @IsInt()
-  @Min(1)
-  page?: number;
-
-  @IsOptional()
-  @Transform((limit) => parseInt(limit))
-  @IsInt()
-  @Min(5)
-  @Max(100)
-  limit?: number;
-
+export class ListTodoDTO extends ListDTO {
   @IsOptional()
   title?: string;
 
