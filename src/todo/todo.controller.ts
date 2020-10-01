@@ -11,9 +11,7 @@ import {
 } from '@nestjs/common';
 import { Pagination } from 'src/utils/limit-offset-paginate';
 import { Like } from 'typeorm';
-import { CreateTodoDTO } from './dto/create-todo.dto';
-import { ListTodoDTO } from './dto/list-todo.dto';
-import { UpdateTodoDTO } from './dto/update-todo.dto';
+import { CreateTodoDTO, UpdateTodoDTO, ListTodoDTO } from './dto';
 import { Todo } from './todo.entity';
 import { TodoService } from './todo.service';
 
