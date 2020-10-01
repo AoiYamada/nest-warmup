@@ -9,7 +9,6 @@ describe('TodoController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TodoController],
-
       providers: [TodoService, TodoRepository],
     }).compile();
 
