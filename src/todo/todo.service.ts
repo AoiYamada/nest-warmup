@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  IPaginationOptions,
-  paginate,
-  Pagination,
-} from 'src/utils/limit-offset-paginate';
-import { Like } from 'typeorm';
+import { ResourceService } from 'src/common/resource.service';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { Todo } from './todo.entity';
@@ -13,51 +8,17 @@ import { TodoRepository } from './todo.repository';
 
 @Injectable()
 // Note: seems useless here but it is useful when the business logic require to manipulate multiple tables
-export class TodoService {
+export class TodoService extends ResourceService<
+  Todo,
+  CreateTodoDTO,
+  UpdateTodoDTO
+> {
   constructor(
-    // TODO: nest doc examples inject entity directly, and others use repository layer, see if it is useful
+    // Nest doc examples inject entity directly, and others use repository layer
+    // Because it is fucking difficult and lack of doc about how to write the test spec without repository layer
     @InjectRepository(TodoRepository)
-    private todoRepository: TodoRepository,
-  ) {}
-
-  async create(payload: CreateTodoDTO): Promise<{ id: number }> {
-    const todo = this.todoRepository.create(payload);
-    return this.todoRepository.save(todo);
+    private readonly todoRepository: TodoRepository,
+  ) {
+    super(todoRepository);
   }
-
-  async get(id: number): Promise<Todo | undefined> {
-    return this.todoRepository.findOne(id);
-  }
-
-  async list(
-    paginateOptions: IPaginationOptions,
-    { title = null, content = null }, // TODO: specify what is search options
-  ): Promise<Pagination<Todo>> {
-    return paginate<Todo>(
-      this.todoRepository,
-      { ...paginateOptions, route: '/todo' },
-      {
-        where: [
-          {
-            ...(title && { title: Like(`%${title}%`) }),
-            ...(content && { content: Like(`%${content}%`) }),
-          },
-        ],
-      },
-    );
-  }
-
-  async update(id: number, payload: UpdateTodoDTO): Promise<Todo | undefined> {
-    await this.todoRepository.update(id, payload);
-    return this.todoRepository.findOne(id);
-  }
-
-  async delete(id: number): Promise<void> {
-    await this.todoRepository.softDelete(id);
-  }
-
-  // TODO: endpoint for restore softDeleted item
-  // async restore(id: number): Promise<void> {
-  //   await this.todoRepository.restore(id);
-  // }
 }
