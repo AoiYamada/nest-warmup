@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Pagination } from 'src/utils/limit-offset-paginate';
+import { Like } from 'typeorm';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { ListTodoDTO } from './dto/list-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
@@ -44,8 +45,16 @@ export class TodoController {
       {
         page,
         limit,
+        route: '/todo',
       },
-      filters,
+      {
+        where: [
+          {
+            ...(filters.title && { title: Like(`%${filters.title}%`) }),
+            ...(filters.content && { content: Like(`%${filters.content}%`) }),
+          },
+        ],
+      },
     );
   }
 
