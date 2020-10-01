@@ -17,4 +17,13 @@ export class UserService extends ResourceService<
   ) {
     super(userRepository);
   }
+
+  async getByUsername(username: string): Promise<UserEntity | undefined> {
+    return this.userRepository.findOne({
+      select: ['id', 'username', 'email'],
+      where: {
+        username,
+      },
+    });
+  }
 }
