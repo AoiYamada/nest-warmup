@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceService } from 'src/common/resource.service';
-import { CreateTodoDTO, UpdateTodoDTO } from './dto';
+import { CreateTodoDto, UpdateTodoDto } from './dto';
 import { Todo } from './todo.entity';
 import { TodoRepository } from './todo.repository';
 
@@ -9,8 +9,8 @@ import { TodoRepository } from './todo.repository';
 // Note: seems useless here but it is useful when the business logic require to manipulate multiple tables
 export class TodoService extends ResourceService<
   Todo,
-  CreateTodoDTO,
-  UpdateTodoDTO
+  CreateTodoDto,
+  UpdateTodoDto
 > {
   constructor(
     // Nest doc examples inject entity directly, and others use repository layer

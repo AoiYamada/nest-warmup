@@ -1,4 +1,6 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { JwtModule } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from 'src/user/user.entity';
 import { UserRepository } from 'src/user/user.repository';
@@ -11,6 +13,18 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          useFactory: async (configService: ConfigService) => ({
+            secret: configService.get('app.JWT_SECRET'),
+            signOptions: {
+              expiresIn: 3600,
+            },
+          }),
+          inject: [ConfigService],
+        }),
+      ],
       providers: [AuthService, UserService, UserRepository],
     }).compile();
 

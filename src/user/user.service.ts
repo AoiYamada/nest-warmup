@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceService } from 'src/common/resource.service';
-import { CreateUserDTO, UpdateUserDTO } from './dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 import { UserEntity } from './user.entity';
 import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService extends ResourceService<
   UserEntity,
-  CreateUserDTO,
-  UpdateUserDTO
+  CreateUserDto,
+  UpdateUserDto
 > {
   constructor(
     @InjectRepository(UserRepository)
@@ -20,7 +20,6 @@ export class UserService extends ResourceService<
 
   async getByUsername(username: string): Promise<UserEntity | undefined> {
     return this.userRepository.findOne({
-      select: ['id', 'username', 'email'],
       where: {
         username,
       },

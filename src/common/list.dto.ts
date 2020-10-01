@@ -1,7 +1,7 @@
 import { Min, Max, IsInt, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 
-export abstract class ListDTO {
+export abstract class ListDto {
   @IsOptional()
   @Transform((page) => parseInt(page))
   @IsInt()

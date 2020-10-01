@@ -11,19 +11,13 @@ import {
 } from '@nestjs/common';
 import { Pagination } from 'src/utils/limit-offset-paginate';
 import { Like } from 'typeorm';
-import { CreateUserDTO, UpdateUserDTO, ListUserDTO } from './dto';
+import { CreateUserDto, UpdateUserDto, ListUserDto } from './dto';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  // TODO: move to /auth/signUp endpoint
-  @Post()
-  async create(@Body() payload: CreateUserDTO): Promise<{ id: number }> {
-    return this.userService.create(payload);
-  }
 
   // TODO: should be accessible by superuser only
   // TODO: implement GET /users/me to retrieve user data of the logged-in user
@@ -41,7 +35,7 @@ export class UserController {
   // TODO: should be accessible by superuser only
   @Get()
   async list(
-    @Query() { page = 1, limit = 10, ...filters }: ListUserDTO,
+    @Query() { page = 1, limit = 10, ...filters }: ListUserDto,
   ): Promise<Pagination<UserEntity>> {
     return this.userService.list(
       {
@@ -67,7 +61,7 @@ export class UserController {
   @Patch(':id')
   async patch(
     @Param('id') id: number,
-    @Body() payload: UpdateUserDTO,
+    @Body() payload: UpdateUserDto,
   ): Promise<UserEntity> {
     const result = await this.userService.update(id, payload);
 

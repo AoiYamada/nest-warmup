@@ -9,12 +9,12 @@ import { FindConditions, FindManyOptions, Repository } from 'typeorm';
 
 export abstract class ResourceService<
   ResourceEntity,
-  CreateEntityDTO,
-  UpdateEntityDTO
+  CreateEntityDto,
+  UpdateEntityDto
 > {
   constructor(private readonly repository: Repository<ResourceEntity>) {}
 
-  async create(payload: CreateEntityDTO): Promise<ResourceEntity> {
+  async create(payload: CreateEntityDto): Promise<ResourceEntity> {
     const resource = this.repository.create(payload);
     return this.repository.save(resource);
   }
@@ -38,7 +38,7 @@ export abstract class ResourceService<
 
   async update(
     id: number,
-    payload: UpdateEntityDTO,
+    payload: UpdateEntityDto,
   ): Promise<ResourceEntity | undefined> {
     await this.repository.update(id, payload);
     return this.repository.findOne(id);

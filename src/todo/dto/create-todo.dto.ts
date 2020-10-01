@@ -1,6 +1,6 @@
 import { MinLength, MaxLength } from 'class-validator';
 
-export class CreateTodoDTO {
+export class CreateTodoDto {
   @MinLength(1)
   @MaxLength(20)
   title: string;
