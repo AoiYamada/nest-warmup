@@ -14,6 +14,7 @@ import { RedisModule } from './lib/redis-service';
   imports: [
     ConfigModule.forRoot({
       load: [appConfig, jwtConfig, databaseConfig],
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
