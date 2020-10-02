@@ -6,12 +6,11 @@ import {
   NotFoundException,
   Param,
   Patch,
-  Post,
   Query,
 } from '@nestjs/common';
-import { Pagination } from 'src/utils/limit-offset-paginate';
+import { Pagination } from 'src/lib/limit-offset-paginate';
 import { Like } from 'typeorm';
-import { CreateUserDto, UpdateUserDto, ListUserDto } from './dto';
+import { UpdateUserDto, ListUserDto } from './dto';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 

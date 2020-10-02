@@ -21,3 +21,15 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - ${MYSQL_PORT}:3306
+  redis:
+    image: redis:6.0.8
+    ports:
+      - '6379:6379'
+  # not for production
+  # redis-cluster:
+  #   image: grokzen/redis-cluster:6.0.6
+  #   environment:
+  #     IP: '0.0.0.0'
+  #     CLUSTER_ONLY: 'true'
+  #   ports:
+  #     - '7000-7005:7000-7005'

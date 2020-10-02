@@ -1,5 +1,5 @@
-import { paginate } from '../index';
 import { Repository, FindManyOptions } from 'typeorm';
+import { paginate } from '../index';
 import { Pagination } from '../pagination';
 
 class MockRepository extends Repository<any> {
