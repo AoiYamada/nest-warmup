@@ -4,7 +4,7 @@ import {
   IPaginationOptions,
   paginate,
   Pagination,
-} from 'src/utils/limit-offset-paginate';
+} from 'src/lib/limit-offset-paginate';
 import { FindConditions, FindManyOptions, Repository } from 'typeorm';
 
 export abstract class ResourceService<

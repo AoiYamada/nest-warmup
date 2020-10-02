@@ -2,10 +2,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule, getConnectionToken } from '@nestjs/typeorm';
 import { Connection, SelectQueryBuilder } from 'typeorm';
+import databaseConfig from 'src/config/database.config';
 import { paginate } from '../paginate';
 import { Pagination } from '../pagination';
 import { TestEntity } from './test.entity';
-import databaseConfig from '../../../config/database.config';
 
 describe('Paginate with queryBuilder', () => {
   let app: TestingModule;
