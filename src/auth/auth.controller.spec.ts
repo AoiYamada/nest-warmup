@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from './local.strategy';
+import { LocalStrategy } from './passport';
 import { UserRepository } from 'src/user/user.repository';
 import { UserService } from 'src/user/user.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RedisModule } from 'src/lib/redis-service';
 import appConfig from 'src/config/app.config';
 import jwtConfig from 'src/config/jwt.config';
+import { RedisService } from 'src/lib/redis-service';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -30,7 +30,18 @@ describe('AuthController', () => {
           inject: [ConfigService],
         }),
       ],
-      providers: [AuthService, UserService, UserRepository, LocalStrategy],
+      providers: [
+        AuthService,
+        UserService,
+        UserRepository,
+        LocalStrategy,
+        {
+          provide: RedisService,
+          useValue: {
+            getClient: jest.fn(),
+          },
+        },
+      ],
       controllers: [AuthController],
     }).compile();
 

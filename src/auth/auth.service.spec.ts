@@ -6,9 +6,9 @@ import { UserEntity } from 'src/user/user.entity';
 import { UserRepository } from 'src/user/user.repository';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
-import { RedisModule } from 'src/lib/redis-service';
 import appConfig from 'src/config/app.config';
 import jwtConfig from 'src/config/jwt.config';
+import { RedisService } from 'src/lib/redis-service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -31,7 +31,17 @@ describe('AuthService', () => {
           inject: [ConfigService],
         }),
       ],
-      providers: [AuthService, UserService, UserRepository],
+      providers: [
+        AuthService,
+        UserService,
+        UserRepository,
+        {
+          provide: RedisService,
+          useValue: {
+            getClient: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = await module.resolve(AuthService);
