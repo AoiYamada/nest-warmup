@@ -6,6 +6,9 @@ import { UserEntity } from 'src/user/user.entity';
 import { UserRepository } from 'src/user/user.repository';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
+import { RedisModule } from 'src/lib/redis-service';
+import appConfig from 'src/config/app.config';
+import jwtConfig from 'src/config/jwt.config';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -14,12 +17,15 @@ describe('AuthService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        ConfigModule.forRoot({
+          load: [appConfig, jwtConfig],
+        }),
         JwtModule.registerAsync({
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
             secret: configService.get('jwt.SECRET'),
             signOptions: {
-              expiresIn: 3600,
+              expiresIn: configService.get('jwt.TOKEN_EXPIRE_TIME'),
             },
           }),
           inject: [ConfigService],
@@ -47,6 +53,7 @@ describe('AuthService', () => {
 
     const user = new UserEntity();
 
+    user.id = 1;
     user.username = username;
     user.password = hashedPassword;
 
@@ -64,7 +71,11 @@ describe('AuthService', () => {
 
     expect(userServiceSpy.getByUsername).toHaveBeenLastCalledWith(username);
     expect(userEntitySpy.verifyPassword).toHaveBeenLastCalledWith(password);
-    expect(result).toEqual(user);
+    expect(result).toEqual({
+      id: user.id,
+      username: user.username,
+      permissions: [],
+    });
   });
 
   it('validateUser should return null if password does not match', async () => {

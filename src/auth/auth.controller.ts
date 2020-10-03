@@ -10,11 +10,12 @@ import {
 } from '@nestjs/common';
 import { Request as IRequest } from 'express';
 import { CreateUserDto } from 'src/user/dto';
-import { UserEntity } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
+import { PermissionsGuard } from './permissions.guard';
+import { RequirePermissions } from './require-permissions.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -46,14 +47,24 @@ export class AuthController {
   @Post('signIn')
   async signIn(
     @Request() { user }: IRequest,
-  ): Promise<{ accessToken: string }> {
-    return this.authService.signIn(user as UserEntity);
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.authService.issueToken(
+      user as { id: number; username: string; permissions: string[] },
+    );
   }
 
   // TODO: remove this, test JWT endpoint
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  // TODO: remove this, test JWT endpoint
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Get('refresh')
+  @RequirePermissions('refresh')
+  get(@Request() req) {
+    return ['nothing'];
   }
 }
