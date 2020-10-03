@@ -8,14 +8,13 @@ import {
   InternalServerErrorException,
   Get,
 } from '@nestjs/common';
-import { Request as IRequest } from 'express';
 import { CreateUserDto } from 'src/user/dto';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { LocalAuthGuard } from './local-auth.guard';
-import { PermissionsGuard } from './permissions.guard';
-import { RequirePermissions } from './require-permissions.decorator';
+import { JwtAuthGuard } from './passport/jwt-auth.guard';
+import { LocalAuthGuard, PermissionsGuard } from './passport';
+import { SignInRO } from './ro/sign-in.ro';
+import { AuthUser, RequirePermissions, BearerToken } from './decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -46,25 +45,27 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('signIn')
   async signIn(
-    @Request() { user }: IRequest,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    return this.authService.issueToken(
-      user as { id: number; username: string; permissions: string[] },
-    );
+    @AuthUser() user: { id: number; username: string; permissions: string[] },
+    @Body('scopes') scopes: string[],
+  ): Promise<SignInRO> {
+    return this.authService.issueToken({
+      sub: user.id,
+      username: user.username,
+      permissions: user.permissions,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Post('refresh')
+  @RequirePermissions('refresh')
+  async refreshToken(@BearerToken() refreshToken: string): Promise<SignInRO> {
+    return this.authService.refreshToken(refreshToken);
   }
 
   // TODO: remove this, test JWT endpoint
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  async getProfile(@Request() req) {
     return req.user;
-  }
-
-  // TODO: remove this, test JWT endpoint
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Get('refresh')
-  @RequirePermissions('refresh')
-  get(@Request() req) {
-    return ['nothing'];
   }
 }
