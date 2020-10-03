@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { RedisService } from 'src/lib/redis-service';
-import { SignInRO } from './ro/sign-in.ro';
+import { SignInRo } from './ro/sign-in.ro';
 import { Ok, Redis } from 'ioredis';
 
 @Injectable()
@@ -45,7 +45,7 @@ export class AuthService {
     sub: number;
     username: string;
     permissions: string[];
-  }): Promise<SignInRO> {
+  }): Promise<SignInRo> {
     const accessToken = this.jwtService.sign({ sub, username, permissions });
     const refreshToken = this.jwtService.sign(
       { sub, username, permissions: ['refresh'] },

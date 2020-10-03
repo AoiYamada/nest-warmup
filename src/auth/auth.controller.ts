@@ -13,7 +13,7 @@ import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './passport/jwt-auth.guard';
 import { LocalAuthGuard, PermissionsGuard } from './passport';
-import { SignInRO } from './ro/sign-in.ro';
+import { SignInRo } from './ro/sign-in.ro';
 import { AuthUser, RequirePermissions, BearerToken } from './decorator';
 
 @Controller('auth')
@@ -47,7 +47,7 @@ export class AuthController {
   async signIn(
     @AuthUser() user: { id: number; username: string; permissions: string[] },
     @Body('scopes') scopes: string[],
-  ): Promise<SignInRO> {
+  ): Promise<SignInRo> {
     return this.authService.issueToken({
       sub: user.id,
       username: user.username,
@@ -58,7 +58,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Post('refresh')
   @RequirePermissions('refresh')
-  async refreshToken(@BearerToken() refreshToken: string): Promise<SignInRO> {
+  async refreshToken(@BearerToken() refreshToken: string): Promise<SignInRo> {
     return this.authService.refreshToken(refreshToken);
   }
 

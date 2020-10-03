@@ -1,4 +1,4 @@
-export class SignInRO {
+export class SignInRo {
   accessToken: string;
   refreshToken: string;
 }
