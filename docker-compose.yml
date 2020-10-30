@@ -22,7 +22,7 @@ services:
     ports:
       - ${MYSQL_PORT}:3306
   redis:
-    image: redis:6.0.8
+    image: redis:6.0.9
     ports:
       - '6379:6379'
   # not for production
