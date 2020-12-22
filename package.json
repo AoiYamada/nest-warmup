@@ -46,7 +46,7 @@
     "rimraf": "3.0.2",
     "rxjs": "6.6.3",
     "typeorm": "0.2.29",
-    "uuid": "8.3.1",
+    "uuid": "8.3.2",
     "wildcard": "2.0.0"
   },
   "devDependencies": {
